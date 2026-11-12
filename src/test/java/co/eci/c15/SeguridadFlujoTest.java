@@ -55,7 +55,7 @@ class SeguridadFlujoTest {
                         .content("{\"nombre\":\"" + nombre + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
-        return respuesta.replaceAll(".*\"id\":\"([^\"]+)\".*", "$1");
+        return com.jayway.jsonpath.JsonPath.read(respuesta, "$.id");
     }
 
     @Test

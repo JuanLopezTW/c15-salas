@@ -16,6 +16,8 @@ import java.util.Map;
 @RequestMapping("/api/equipos")
 public class EquipoController {
 
+    private static final String ERROR = "error";
+
     private final UnirseEquipoUseCase unirse;
 
     public EquipoController(UnirseEquipoUseCase unirse) {
@@ -28,11 +30,11 @@ public class EquipoController {
             EquipoDto dto = unirse.ejecutar(equipoId, yo.getName());
             return ResponseEntity.ok(dto);
         } catch (EquipoLlenoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(ERROR, e.getMessage()));
         } catch (JugadorNoEnSalaException | PartidaYaIniciadaException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(ERROR, e.getMessage()));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of(ERROR, e.getMessage()));
         }
     }
 }

@@ -40,7 +40,7 @@ public class SesionesLobbyListener {
     @EventListener
     public void onSesion(SesionEvent sesion) {
         if (!sesion.deSala()) return;
-        if (sesion.abierta()) {
+        if (sesion.estaAbierta()) {
             presencia.entrar(sesion.sessionId(), sesion.id(), sesion.userId());
             return;
         }

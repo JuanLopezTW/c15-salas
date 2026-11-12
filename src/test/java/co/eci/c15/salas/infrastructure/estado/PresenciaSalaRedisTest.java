@@ -16,7 +16,6 @@ import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /** Dos "instancias" (dos adaptadores) sobre el mismo Redis real; sin Docker se salta. */

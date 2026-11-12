@@ -29,6 +29,8 @@ import java.util.function.Supplier;
 @RequestMapping("/api/salas")
 public class SalaController {
 
+    private static final String ERROR = "error";
+
     private final CrearSalaUseCase crear;
     private final ListarSalasUseCase listar;
     private final ConfigurarSalaUseCase configurar;
@@ -61,9 +63,9 @@ public class SalaController {
         try {
             return ResponseEntity.ok(verSala.ejecutar(salaId));
         } catch (SalaNoEncontradaException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(ERROR, e.getMessage()));
         } catch (PartidaYaIniciadaException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(ERROR, e.getMessage()));
         }
     }
 
@@ -75,7 +77,7 @@ public class SalaController {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(crear.ejecutar(nombre == null ? null : nombre.toString(), yo.getName(), minutos));
         } catch (ConfiguracionInvalidaException | IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of(ERROR, e.getMessage()));
         }
     }
 
@@ -86,9 +88,9 @@ public class SalaController {
             return ResponseEntity.ok(configurar.ejecutar(salaId, yo.getName(),
                     entero(body, "numEquipos"), entero(body, "jugadoresPorEquipo")));
         } catch (NoEsAnfitrionException | PartidaYaIniciadaException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(ERROR, e.getMessage()));
         } catch (ConfiguracionInvalidaException | IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of(ERROR, e.getMessage()));
         }
     }
 
@@ -97,11 +99,11 @@ public class SalaController {
         try {
             return ResponseEntity.ok(unirse.ejecutar(salaId, yo.getName()));
         } catch (SalaLlenaException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(ERROR, e.getMessage()));
         } catch (PartidaYaIniciadaException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(ERROR, e.getMessage()));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of(ERROR, e.getMessage()));
         }
     }
 
@@ -110,7 +112,7 @@ public class SalaController {
         try {
             return ResponseEntity.ok(listarEquipos.ejecutar(salaId));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(ERROR, e.getMessage()));
         }
     }
 
@@ -140,11 +142,11 @@ public class SalaController {
         try {
             return ResponseEntity.ok(accion.get());
         } catch (SalaNoEncontradaException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(ERROR, e.getMessage()));
         } catch (PartidaYaIniciadaException | JugadorSinEquipoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(ERROR, e.getMessage()));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of(ERROR, e.getMessage()));
         }
     }
 
