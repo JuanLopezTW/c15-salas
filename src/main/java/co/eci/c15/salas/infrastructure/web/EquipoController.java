@@ -25,7 +25,7 @@ public class EquipoController {
     }
 
     @PostMapping("/{equipoId}/miembros")
-    public ResponseEntity<?> unirse(@PathVariable("equipoId") String equipoId, Principal yo) {
+    public ResponseEntity<Object> unirse(@PathVariable("equipoId") String equipoId, Principal yo) {
         try {
             EquipoDto dto = unirse.ejecutar(equipoId, yo.getName());
             return ResponseEntity.ok(dto);

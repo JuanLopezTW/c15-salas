@@ -58,8 +58,8 @@ class ConfigurarSalaUseCaseTest {
         sala.unirJugador("user-1");
         equipos.findBySalaId(sala.getId()).get(2).unirMiembro("user-1");
 
-        assertThrows(ConfiguracionInvalidaException.class,
-                () -> useCase.ejecutar(sala.getId(), "anfitrion-1", 2, 2));
+        String salaId = sala.getId();
+        assertThrows(ConfiguracionInvalidaException.class, () -> useCase.ejecutar(salaId, "anfitrion-1", 2, 2));
         assertEquals(3, equipos.findBySalaId(sala.getId()).size());
     }
 
@@ -72,24 +72,24 @@ class ConfigurarSalaUseCaseTest {
         reset(repo);
         when(repo.findById(sala.getId())).thenReturn(Optional.of(sala));
 
-        assertThrows(ConfiguracionInvalidaException.class,
-                () -> useCase.ejecutar(sala.getId(), "anfitrion-1", 2, 2));
+        String salaId = sala.getId();
+        assertThrows(ConfiguracionInvalidaException.class, () -> useCase.ejecutar(salaId, "anfitrion-1", 2, 2));
         verify(repo, never()).save(any());
         verifyNoInteractions(events);
     }
 
     @Test
     void fueraDeLosTopesNoCambiaNada() {
-        assertThrows(ConfiguracionInvalidaException.class,
-                () -> useCase.ejecutar(sala.getId(), "anfitrion-1", 3, 5));
+        String salaId = sala.getId();
+        assertThrows(ConfiguracionInvalidaException.class, () -> useCase.ejecutar(salaId, "anfitrion-1", 3, 5));
         verify(repo, never()).save(any());
         assertEquals(3, equipos.findBySalaId(sala.getId()).size());
     }
 
     @Test
     void noAnfitrionLanzaExcepcion() {
-        assertThrows(NoEsAnfitrionException.class,
-                () -> useCase.ejecutar(sala.getId(), "otro-user", 2, 2));
+        String salaId = sala.getId();
+        assertThrows(NoEsAnfitrionException.class, () -> useCase.ejecutar(salaId, "otro-user", 2, 2));
         verify(repo, never()).save(any());
         assertEquals(3, equipos.findBySalaId(sala.getId()).size());
     }

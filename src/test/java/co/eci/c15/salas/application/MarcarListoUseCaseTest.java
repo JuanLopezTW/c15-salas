@@ -81,8 +81,9 @@ class MarcarListoUseCaseTest {
 
     @Test
     void jugadorSinEquipoNoPuedeMarcarse() {
-        assertThrows(JugadorSinEquipoException.class, () -> useCase.marcar(sala.getId(), "caro"));
-        assertThrows(JugadorSinEquipoException.class, () -> useCase.desmarcar(sala.getId(), "caro"));
+        String salaId = sala.getId();
+        assertThrows(JugadorSinEquipoException.class, () -> useCase.marcar(salaId, "caro"));
+        assertThrows(JugadorSinEquipoException.class, () -> useCase.desmarcar(salaId, "caro"));
         verifyNoInteractions(events);
     }
 
@@ -94,12 +95,14 @@ class MarcarListoUseCaseTest {
     @Test
     void conPartidaIniciadaNoSePuedeCambiarElListo() {
         sala.iniciarPartida();
-        assertThrows(PartidaYaIniciadaException.class, () -> useCase.marcar(sala.getId(), "ana"));
+        String salaId = sala.getId();
+        assertThrows(PartidaYaIniciadaException.class, () -> useCase.marcar(salaId, "ana"));
     }
 
     @Test
     void userIdVacioEsInvalido() {
-        assertThrows(IllegalArgumentException.class, () -> useCase.marcar(sala.getId(), " "));
-        assertThrows(IllegalArgumentException.class, () -> useCase.desmarcar(sala.getId(), null));
+        String salaId = sala.getId();
+        assertThrows(IllegalArgumentException.class, () -> useCase.marcar(salaId, " "));
+        assertThrows(IllegalArgumentException.class, () -> useCase.desmarcar(salaId, null));
     }
 }

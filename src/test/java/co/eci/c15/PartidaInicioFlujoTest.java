@@ -76,7 +76,8 @@ class PartidaInicioFlujoTest {
                 .andExpect(status().isOk());
         await().atMost(Duration.ofSeconds(5)).until(() -> !cuentaRegresiva.enCurso(salaId));
 
-        Thread.sleep(1500);
+        // No arranca durante un rato (no solo al final)
+        await().during(Duration.ofMillis(1500)).atMost(Duration.ofSeconds(3)).until(() -> inicios.de(salaId).isEmpty());
         mvc.perform(get("/api/salas/{id}", salaId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.estado").value("DISPONIBLE"));

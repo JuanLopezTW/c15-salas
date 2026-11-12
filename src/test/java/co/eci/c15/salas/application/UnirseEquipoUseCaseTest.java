@@ -58,7 +58,8 @@ class UnirseEquipoUseCaseTest {
         useCase.ejecutar(equipo1.getId(), "user-1");
         useCase.ejecutar(equipo1.getId(), "user-2");
         useCase.ejecutar(equipo1.getId(), "user-3");
-        assertThrows(EquipoLlenoException.class, () -> useCase.ejecutar(equipo1.getId(), "user-4"));
+        String equipoId = equipo1.getId();
+        assertThrows(EquipoLlenoException.class, () -> useCase.ejecutar(equipoId, "user-4"));
     }
 
     @Test
@@ -68,7 +69,8 @@ class UnirseEquipoUseCaseTest {
 
     @Test
     void jugadorFueraDeLaSalaNoPuedeUnirse() {
-        assertThrows(JugadorNoEnSalaException.class, () -> useCase.ejecutar(equipo1.getId(), "intruso"));
+        String equipoId = equipo1.getId();
+        assertThrows(JugadorNoEnSalaException.class, () -> useCase.ejecutar(equipoId, "intruso"));
         assertTrue(equipo1.isVacio());
         verifyNoInteractions(events);
     }
@@ -76,7 +78,8 @@ class UnirseEquipoUseCaseTest {
     @Test
     void conPartidaIniciadaNoSePuedeUnir() {
         sala.iniciarPartida();
-        assertThrows(PartidaYaIniciadaException.class, () -> useCase.ejecutar(equipo1.getId(), "user-1"));
+        String equipoId = equipo1.getId();
+        assertThrows(PartidaYaIniciadaException.class, () -> useCase.ejecutar(equipoId, "user-1"));
     }
 
     @Test
@@ -105,7 +108,8 @@ class UnirseEquipoUseCaseTest {
         useCase.ejecutar(equipo2.getId(), "user-3");
         useCase.ejecutar(equipo2.getId(), "user-4");
 
-        assertThrows(EquipoLlenoException.class, () -> useCase.ejecutar(equipo2.getId(), "user-1"));
+        String equipoLleno = equipo2.getId();
+        assertThrows(EquipoLlenoException.class, () -> useCase.ejecutar(equipoLleno, "user-1"));
         assertTrue(equipo1.contieneMiembro("user-1"));
     }
 }

@@ -42,13 +42,15 @@ class UnirseSalaUseCaseTest {
     void salaLlenaLanzaExcepcion() {
         sala.configurar("anfitrion-1", 2, 2);
         for (int i = 1; i <= 4; i++) sala.unirJugador("user-" + i);
-        assertThrows(SalaLlenaException.class, () -> useCase.ejecutar(sala.getId(), "user-5"));
+        String salaId = sala.getId();
+        assertThrows(SalaLlenaException.class, () -> useCase.ejecutar(salaId, "user-5"));
         verify(repo, never()).save(any());
     }
 
     @Test
     void partidaIniciadaLanzaExcepcion() {
         sala.iniciarPartida();
-        assertThrows(PartidaYaIniciadaException.class, () -> useCase.ejecutar(sala.getId(), "user-1"));
+        String salaId = sala.getId();
+        assertThrows(PartidaYaIniciadaException.class, () -> useCase.ejecutar(salaId, "user-1"));
     }
 }

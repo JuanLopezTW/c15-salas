@@ -1,5 +1,6 @@
 package co.eci.c15;
 
+import static org.awaitility.Awaitility.await;
 import co.eci.c15.common.events.SesionEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -74,7 +75,9 @@ class SalirDeSalaFlujoTest {
 
         cerrar(salaId, "ana", "sesion-ana-1");
         abrir(salaId, "ana", "sesion-ana-2");
-        Thread.sleep(600); // mas que la gracia de los tests
+        // La sala sigue abierta durante mas que la gracia de los tests
+        await().during(Duration.ofMillis(600)).atMost(Duration.ofSeconds(2))
+                .untilAsserted(() -> mvc.perform(get("/api/salas/{id}", salaId)).andExpect(status().isOk()));
 
         mvc.perform(get("/api/salas/{id}", salaId))
                 .andExpect(status().isOk())

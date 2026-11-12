@@ -82,7 +82,8 @@ class VerSalaUseCaseTest {
     @Test
     void salaConPartidaIniciadaEstaCerrada() {
         sala.iniciarPartida();
-        assertThrows(PartidaYaIniciadaException.class, () -> useCase.ejecutar(sala.getId()));
+        String salaId = sala.getId();
+        assertThrows(PartidaYaIniciadaException.class, () -> useCase.ejecutar(salaId));
     }
 
     @Test

@@ -59,7 +59,7 @@ public class SalaController {
     }
 
     @GetMapping("/{salaId}")
-    public ResponseEntity<?> detalle(@PathVariable("salaId") String salaId) {
+    public ResponseEntity<Object> detalle(@PathVariable("salaId") String salaId) {
         try {
             return ResponseEntity.ok(verSala.ejecutar(salaId));
         } catch (SalaNoEncontradaException e) {
@@ -70,7 +70,7 @@ public class SalaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Map<String, Object> body, Principal yo) {
+    public ResponseEntity<Object> crear(@RequestBody Map<String, Object> body, Principal yo) {
         try {
             Object nombre = body.get("nombre");
             Integer minutos = body.get("minutos") == null ? null : entero(body, "minutos");
@@ -82,7 +82,7 @@ public class SalaController {
     }
 
     @PatchMapping("/{salaId}/configuracion")
-    public ResponseEntity<?> configurar(@PathVariable("salaId") String salaId, @RequestBody Map<String, Object> body,
+    public ResponseEntity<Object> configurar(@PathVariable("salaId") String salaId, @RequestBody Map<String, Object> body,
                                         Principal yo) {
         try {
             return ResponseEntity.ok(configurar.ejecutar(salaId, yo.getName(),
@@ -95,7 +95,7 @@ public class SalaController {
     }
 
     @PostMapping("/{salaId}/jugadores")
-    public ResponseEntity<?> unirse(@PathVariable("salaId") String salaId, Principal yo) {
+    public ResponseEntity<Object> unirse(@PathVariable("salaId") String salaId, Principal yo) {
         try {
             return ResponseEntity.ok(unirse.ejecutar(salaId, yo.getName()));
         } catch (SalaLlenaException e) {
@@ -108,7 +108,7 @@ public class SalaController {
     }
 
     @GetMapping("/{salaId}/equipos")
-    public ResponseEntity<?> equipos(@PathVariable("salaId") String salaId) {
+    public ResponseEntity<Object> equipos(@PathVariable("salaId") String salaId) {
         try {
             return ResponseEntity.ok(listarEquipos.ejecutar(salaId));
         } catch (IllegalArgumentException e) {
@@ -117,12 +117,12 @@ public class SalaController {
     }
 
     @PostMapping("/{salaId}/listo")
-    public ResponseEntity<?> marcarListo(@PathVariable("salaId") String salaId, Principal yo) {
+    public ResponseEntity<Object> marcarListo(@PathVariable("salaId") String salaId, Principal yo) {
         return listo(() -> marcarListo.marcar(salaId, yo.getName()));
     }
 
     @DeleteMapping("/{salaId}/listo")
-    public ResponseEntity<?> desmarcarListo(@PathVariable("salaId") String salaId, Principal yo) {
+    public ResponseEntity<Object> desmarcarListo(@PathVariable("salaId") String salaId, Principal yo) {
         return listo(() -> marcarListo.desmarcar(salaId, yo.getName()));
     }
 
@@ -138,7 +138,7 @@ public class SalaController {
         return ResponseEntity.noContent().build();
     }
 
-    private static ResponseEntity<?> listo(Supplier<SalaDetalleDto> accion) {
+    private static ResponseEntity<Object> listo(Supplier<SalaDetalleDto> accion) {
         try {
             return ResponseEntity.ok(accion.get());
         } catch (SalaNoEncontradaException e) {
